@@ -5,7 +5,7 @@ actually dominating a hashtag right now.
 
 No scraping APIs, no API keys shipped in the browser: a **Chrome MV3 extension** reads the
 tweets already rendered on the X/Twitter hashtag page you have open, and a **Python FastAPI
-backend** (hexagonal architecture, SOLID) asks **TypeSafe Jev** to grade your draft with
+backend** (hexagonal architecture) asks **TypeSafe Jev** to grade your draft with
 typed, calibrated answers instead of free-form LLM prose.
 
 ```
@@ -47,7 +47,7 @@ typed, calibrated answers instead of free-form LLM prose.
    Jev's 32k-token state limit), and calls `system_one` with three typed questions.
 7. The popup renders `originality /100`, `verdict`, `saturated %`, and latency.
 
-## Architecture (SOLID)
+## Architecture
 
 Layered **hexagonal / ports-and-adapters** design:
 
@@ -62,25 +62,6 @@ backend/
 ├── container.py        # Composition root (DI wiring)
 └── api/                # FastAPI app factory, DTOs, controllers (HTTP only)
 ```
-
-### Design principles & patterns
-
-| SOLID principle | Where |
-|---|---|
-| **Single Responsibility** | One job per class: cleaners clean, budget samples, `StateBuilder` assembles, `JevQuestionFactory` defines questions, `JevJudge` calls the API, `GradingService` orchestrates, controllers do HTTP only |
-| **Open/Closed** | Swap a `Judge`, `Cleaner`, `BudgetPolicy`, or `Rubric` by changing only `container.py` — service and routes never change |
-| **Liskov Substitution** | `StubJudge` and `JevJudge` share the `Judge` contract → interchangeable in dev/tests (the full pipeline runs with no API key) |
-| **Interface Segregation** | Four narrow protocols instead of one fat interface; `GradingService` only sees what it needs |
-| **Dependency Inversion** | `GradingService` depends on `Protocol`s injected from the `Container`; controllers depend on `GradingService`, not on TypeSafe internals |
-
-| Pattern | Use |
-|---|---|
-| **Ports & Adapters (Hexagonal)** | Domain logic is isolated from the outside world (TypeSafe, HTTP) behind `ports/` |
-| **Dependency Injection / Composition Root** | `container.py` is the single place concretions are wired |
-| **Strategy** | `JevJudge`/`StubJudge`, `TokenSamplingBudget`/`PassthroughBudget`, individual cleaners |
-| **Composite** | `CompositeCleaner([Noise, LightText, Dedupe])` chains cleaning steps |
-| **Facade** | `GradingService.grade(draft, corpus)` hides the whole pipeline |
-| **DTOs** | `JudgeAnswers`, `GradeResult`, Pydantic `CheckRequest`/`CheckResponse` |
 
 ## Project structure
 
