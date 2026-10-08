@@ -3,3 +3,6 @@
 __pycache__/
 *.pyc
 .uv/
+
+# local-only docs (never commit)
+PROJECT_GUIDE.md

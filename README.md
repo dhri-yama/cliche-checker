@@ -1,12 +1,11 @@
 # cliche-checker
 
-Grade whether a social post draft is **original or cliché** — judged against the tweets
-actually dominating a hashtag right now.
+## About
 
-No scraping APIs, no API keys shipped in the browser: a **Chrome MV3 extension** reads the
-tweets already rendered on the X/Twitter hashtag page you have open, and a **Python FastAPI
-backend** (hexagonal architecture) asks **TypeSafe Jev** to grade your draft with
-typed, calibrated answers instead of free-form LLM prose.
+**cliche-checker** grades whether a social post draft is **original or cliché** — judged against the tweets actually dominating a hashtag on X right now.
+
+No scraping APIs, no API keys shipped in the browser: a **Chrome MV3 extension** reads the tweets already rendered on the X/Twitter hashtag page you have open, and a **Python FastAPI backend** (hexagonal architecture) asks **TypeSafe Jev** to grade your draft with typed, calibrated answers instead of free-form LLM prose.
+
 
 ```
 ┌─────────────────────────── Chrome extension ───────────────────────────┐
